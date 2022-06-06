@@ -3,7 +3,7 @@
 %
 
 % Last modified 06 Jun 2022 // MATLAB 9.9.0.1570001 (R2020b) Update 4 Win10
-% David T. Wang (david.wang@und.edu) + Summer 2022 CE 423L Group XX Members
+% David T. Wang (david.wang@und.edu) + Summer 2022 CE 423L Group 4 Members
 
 clear;
 
@@ -92,7 +92,7 @@ for i=1:100, %m = columns of Reynolds number data
     f_best(i) = fzero(@(f) 1/sqrt(f)+2*log10(rri_best/3.71+2.51/(ReiT(i)*sqrt(f))),[eps,1]); % solve implicit Colebrook-White equation
 end
 
-%% Plot Moody diagram with Fanning friction factor
+%% Plot Moody diagram with Darcy-Weisbach friction factor
 
 figure(1); clf;
 

@@ -1,0 +1,416 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Lab1_FrictionFactorPlot</title><meta name="generator" content="MATLAB 9.9"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-06-06"><meta name="DC.source" content="Lab1_FrictionFactorPlot.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">Set up friction factor calculation for laminar flow</a></li><li><a href="#3">Set up Darcy-Weisbach friction factor calculation</a></li><li><a href="#4">Calculations on lab data</a></li><li><a href="#5">Best-fit line through lab data</a></li><li><a href="#6">Plot Moody diagram with Darcy-Weisbach friction factor</a></li><li><a href="#7">Plot data</a></li><li><a href="#8">Format plot</a></li></ul></div><pre class="codeinput"><span class="comment">% Lab 1 Friction Factor Pipe Roughness</span>
+<span class="comment">% Data collected 06 Jun 2022 in Upson I 112 Hydraulics Laboratory, UND.</span>
+<span class="comment">%</span>
+
+<span class="comment">% Last modified 06 Jun 2022 // MATLAB 9.9.0.1570001 (R2020b) Update 4 Win10</span>
+<span class="comment">% David T. Wang (david.wang@und.edu) + Summer 2022 CE 423L Group 4 Members</span>
+
+clear;
+</pre><h2 id="2">Set up friction factor calculation for laminar flow</h2><pre class="codeinput">ReiL = logspace(2,log10(4000),10);
+
+fiL = 64./ReiL;
+</pre><h2 id="3">Set up Darcy-Weisbach friction factor calculation</h2><pre class="codeinput">rriT = [0e-6, 1e-6, 5e-6, 1e-5 5e-5, 1e-4, 5e-4, <span class="keyword">...</span><span class="comment"> % relative roughness = e/D, lines to plot</span>
+    .001, .002, .005, .01, .015, .02, .03, .04, .05];
+
+ReiT = logspace(log10(2100), 8, 100); <span class="comment">% Reynolds number values to plot</span>
+
+<span class="comment">% invsqrtf = zeros(length(ReiT), length(rriT));</span>
+fiT = zeros(length(ReiT), length(rriT));
+
+<span class="keyword">for</span> i = 1:length(ReiT),
+    <span class="keyword">for</span> j = 1:length(rriT),
+        <span class="comment">%invsqrtf(i,j) = -1.8 * log10( 6.9/ReiT(i) + (rriT(j)/3.7)^(10/9)</span>
+        <span class="comment">%); % Haaland (1983) equation ... doesn't seem to work?</span>
+        <span class="comment">%fiT(i,j) =0.0625 / ( log10( rriT(j)/3.7 + 5.74/(ReiT(i).^0.9) )^2 );</span>
+        fiT(i,j) = fzero(@(f) 1/sqrt(f)+2*log10(rriT(j)/3.71+2.51/(ReiT(i)*sqrt(f))),[eps,1]); <span class="comment">% solve implicit Colebrook-White equation</span>
+<span class="comment">%         fiT(i,j) = fzero(@(f) 1/sqrt(f)+4*log10(rriT(j)/3.71+1.255/(ReiT(i)*sqrt(f))),[eps,1]);</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment">%fiT = 1./sqrt(invsqrtf); % f for [Re e/D]</span>
+
+<span class="comment">%fiT = fiT*4</span>
+</pre><h2 id="4">Calculations on lab data</h2><pre class="codeinput">L = 0.524; <span class="comment">%meters</span>
+D = 0.003; <span class="comment">%meters</span>
+A = 0.785*D^2; <span class="comment">%m2</span>
+nu = 1e-6; <span class="comment">%m2/s</span>
+
+rhoHg = 13550; <span class="comment">%kg/m3</span>
+rhoW = 1000; <span class="comment">%kg/m3</span>
+
+data = readtable(<span class="string">'Lab1_Data.xlsx'</span>); <span class="comment">% [Head_in, Time_sec, Vol_ml]</span>
+
+H = data.Head_in * 2.54/100; <span class="comment">%m</span>
+Q = (data.Vol_ml ./ 1e6) ./ data.Time_sec ; <span class="comment">%m3/s</span>
+V = Q/A; <span class="comment">%m/s</span>
+Re = V*D/nu; <span class="comment">%dimensionless</span>
+
+f = zeros(6,1);
+
+<span class="keyword">for</span> i=1:3,
+    f(i) = 64./Re(i);
+<span class="keyword">end</span>
+
+<span class="keyword">for</span> i=4:6,
+    f(i) = ( 2*9.81*D*H(i) )/( L*V(i)^2 ) * (rhoHg/rhoW - 1);
+<span class="keyword">end</span>
+
+<span class="comment">% Show results table</span>
+results = table(H, Re, f)
+</pre><pre class="codeoutput">
+results =
+
+  6&times;3 table
+
+       H         Re         f    
+    _______    ______    ________
+
+    0.00508    844.02    0.075827
+    0.01016    1726.8    0.037062
+    0.01524    2255.1    0.028381
+     0.1016    5676.9    0.039999
+     0.2032    8554.2    0.035233
+     0.3048     10584    0.034522
+
+</pre><h2 id="5">Best-fit line through lab data</h2><pre class="codeinput">rriF = linspace(0.001, 0.003, 11); <span class="comment">%test e/D = 0.002, 0.0021, 0.0022, ...</span>
+fF = zeros(length(rriF), 6); <span class="comment">%[e/D datapt]</span>
+<span class="keyword">for</span> k=1:length(rriF), <span class="comment">%k=test values of e/D</span>
+    <span class="keyword">for</span> m=4:6, <span class="comment">%m = columns of Reynolds number data</span>
+        fF(k,m) = fzero(@(f) 1/sqrt(f)+2*log10(rriF(k)/3.71+2.51/(Re(m)*sqrt(f))),[eps,1]);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment">% Determine best-fit value by rastering across likely values of e/D</span>
+fF = fF(:,4:6);
+bestfittests = [rriF' sum(bsxfun(@minus,f(4:6)',fF).^2, 2)*1e5] <span class="comment">% [e/D, sumsq{resid}]</span>
+indexbest = find(bestfittests(:,2)==min(bestfittests(:,2))); <span class="comment">%index of minimimum sumsq resdiuals</span>
+rri_best = bestfittests(indexbest,1);
+
+fprintf([<span class="string">'Best-fit value of relative pipe roughness e/D = '</span> num2str(rri_best) <span class="string">'\n'</span>])
+fprintf([<span class="string">'Sum of squares of residuals in f @ best-fit value = '</span> num2str(bestfittests(indexbest,2)) <span class="string">'\n'</span>])
+
+<span class="comment">% Make best-fit curve</span>
+f_best = zeros(100,1);
+<span class="keyword">for</span> i=1:100, <span class="comment">%m = columns of Reynolds number data</span>
+    f_best(i) = fzero(@(f) 1/sqrt(f)+2*log10(rri_best/3.71+2.51/(ReiT(i)*sqrt(f))),[eps,1]); <span class="comment">% solve implicit Colebrook-White equation</span>
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">
+bestfittests =
+
+    0.0010    1.6970
+    0.0012    1.3519
+    0.0014    1.0520
+    0.0016    0.7957
+    0.0018    0.5819
+    0.0020    0.4093
+    0.0022    0.2769
+    0.0024    0.1834
+    0.0026    0.1280
+    0.0028    0.1095
+    0.0030    0.1271
+
+Best-fit value of relative pipe roughness e/D = 0.0028
+Sum of squares of residuals in f @ best-fit value = 0.10951
+</pre><h2 id="6">Plot Moody diagram with Darcy-Weisbach friction factor</h2><pre class="codeinput">figure(1); clf;
+
+<span class="comment">% Laminar Flow</span>
+loglog(ReiL, fiL, <span class="string">'color'</span>, [0, 0.4470, 0.7410])
+text(2.9e3, 0.015, <span class="string">'laminar flow'</span>, <span class="keyword">...</span>
+    <span class="string">'FontSize'</span>, 8, <span class="keyword">...</span>
+    <span class="string">'Color'</span>, [0, 0.4470, 0.7410])
+
+<span class="comment">% Transition Region</span>
+rectangle(<span class="string">'Position'</span>, [2100, 0.0015, 4000, 1.10], <span class="keyword">...</span>
+                <span class="string">'Curvature'</span>, 0.2, <span class="keyword">...</span>
+                <span class="string">'FaceColor'</span>, [0, 0, 0, 0.1], <span class="keyword">...</span>
+                <span class="string">'EdgeColor'</span>, [0, 0, 0, 0.0]);
+text(4.1e3, 0.021, <span class="string">'transition region'</span>, <span class="keyword">...</span>
+    <span class="string">'FontSize'</span>, 8, <span class="keyword">...</span>
+    <span class="string">'Color'</span>, [0.5, 0.5, 0.5])
+
+hold <span class="string">on</span>;
+
+<span class="comment">% Turbulent Flow</span>
+redMap = [linspace(0, 255, length(rriT))', zeros(length(rriT), 1), zeros(length(rriT), 1)]./255; <span class="comment">%make red colormap for 15 lines</span>
+<span class="keyword">for</span> j = 1:length(rriT),
+    plot(ReiT, fiT(:,j), <span class="string">'color'</span>, redMap(j,:))
+    text(1e8, fiT(end,j), [<span class="string">' '</span> num2str(rriT(j),<span class="string">'%g'</span>)], <span class="keyword">...</span>
+    <span class="string">'FontSize'</span>, 6, <span class="keyword">...</span>
+    <span class="string">'Color'</span>, redMap(j,:), <span class="keyword">...</span>
+    <span class="string">'VerticalAlign'</span>, <span class="string">'middle'</span>, <span class="keyword">...</span>
+    <span class="string">'HorizontalAlign'</span>, <span class="string">'left'</span>)
+<span class="keyword">end</span>
+text(1.5e6, 0.08, <span class="string">'turbulent flow'</span>, <span class="keyword">...</span>
+    <span class="string">'FontSize'</span>, 8, <span class="keyword">...</span>
+    <span class="string">'Color'</span>, <span class="string">'r'</span>)
+
+<span class="comment">% Best-fit e/D curve for turbulent flow data</span>
+plot(ReiT, f_best, <span class="string">'k--'</span>)
+text(1e8, f_best(end), [<span class="string">' '</span> num2str(rri_best,<span class="string">'%g'</span>)], <span class="keyword">...</span>
+    <span class="string">'FontSize'</span>, 6, <span class="keyword">...</span>
+    <span class="string">'Color'</span>, <span class="string">'black'</span>, <span class="keyword">...</span>
+    <span class="string">'FontWeight'</span>, <span class="string">'bold'</span>, <span class="keyword">...</span>
+    <span class="string">'VerticalAlign'</span>, <span class="string">'middle'</span>, <span class="keyword">...</span>
+    <span class="string">'HorizontalAlign'</span>, <span class="string">'left'</span>)
+text(1.1e7, 0.027, <span class="string">'best-fit'</span>, <span class="keyword">...</span>
+    <span class="string">'FontSize'</span>, 6, <span class="keyword">...</span>
+    <span class="string">'FontWeight'</span>, <span class="string">'bold'</span>, <span class="keyword">...</span>
+    <span class="string">'Color'</span>, <span class="string">'k'</span>)
+</pre><img vspace="5" hspace="5" src="Lab1_FrictionFactorPlot_01.png" alt=""> <h2 id="7">Plot data</h2><pre class="codeinput">plot(Re, f, <span class="string">'k.'</span>)
+plot(Re, f, <span class="string">'ko'</span>)
+</pre><img vspace="5" hspace="5" src="Lab1_FrictionFactorPlot_02.png" alt=""> <h2 id="8">Format plot</h2><pre class="codeinput">ax = gca();
+ax.YAxis.Exponent = 0;
+<span class="comment">% xtickformat('%.2f')</span>
+yticks([0.01, 0.015, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1])
+yticks = get(gca,<span class="string">'YTick'</span>);
+set(gca,<span class="string">'YTickLabel'</span>,yticks);
+
+ylim([0.006 0.1])
+xlim([5e2 1e8])
+
+grid <span class="string">on</span>
+
+xlabel(<span class="string">'Reynolds number, $ Re = \frac{\rho\, VD}{\mu}$'</span>, <span class="string">'interpreter'</span>, <span class="string">'latex'</span>)
+ylabel(<span class="string">'Friction factor, $f$'</span>, <span class="string">'interpreter'</span>, <span class="string">'latex'</span>)
+
+title(<span class="string">'Moody diagram for Lab 1'</span>)
+</pre><img vspace="5" hspace="5" src="Lab1_FrictionFactorPlot_03.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2020b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+% Lab 1 Friction Factor Pipe Roughness
+% Data collected 06 Jun 2022 in Upson I 112 Hydraulics Laboratory, UND.
+%
+
+% Last modified 06 Jun 2022 // MATLAB 9.9.0.1570001 (R2020b) Update 4 Win10
+% David T. Wang (david.wang@und.edu) + Summer 2022 CE 423L Group 4 Members
+
+clear;
+
+%% Set up friction factor calculation for laminar flow
+
+ReiL = logspace(2,log10(4000),10);
+
+fiL = 64./ReiL;
+
+%% Set up Darcy-Weisbach friction factor calculation
+
+rriT = [0e-6, 1e-6, 5e-6, 1e-5 5e-5, 1e-4, 5e-4, ... % relative roughness = e/D, lines to plot
+    .001, .002, .005, .01, .015, .02, .03, .04, .05]; 
+
+ReiT = logspace(log10(2100), 8, 100); % Reynolds number values to plot
+
+% invsqrtf = zeros(length(ReiT), length(rriT)); 
+fiT = zeros(length(ReiT), length(rriT)); 
+
+for i = 1:length(ReiT),
+    for j = 1:length(rriT),
+        %invsqrtf(i,j) = -1.8 * log10( 6.9/ReiT(i) + (rriT(j)/3.7)^(10/9)
+        %); % Haaland (1983) equation ... doesn't seem to work?
+        %fiT(i,j) =0.0625 / ( log10( rriT(j)/3.7 + 5.74/(ReiT(i).^0.9) )^2 );
+        fiT(i,j) = fzero(@(f) 1/sqrt(f)+2*log10(rriT(j)/3.71+2.51/(ReiT(i)*sqrt(f))),[eps,1]); % solve implicit Colebrook-White equation
+%         fiT(i,j) = fzero(@(f) 1/sqrt(f)+4*log10(rriT(j)/3.71+1.255/(ReiT(i)*sqrt(f))),[eps,1]);
+    end
+end
+
+%fiT = 1./sqrt(invsqrtf); % f for [Re e/D]
+
+%fiT = fiT*4
+
+%% Calculations on lab data
+
+L = 0.524; %meters
+D = 0.003; %meters
+A = 0.785*D^2; %m2
+nu = 1e-6; %m2/s
+
+rhoHg = 13550; %kg/m3
+rhoW = 1000; %kg/m3
+
+data = readtable('Lab1_Data.xlsx'); % [Head_in, Time_sec, Vol_ml]
+
+H = data.Head_in * 2.54/100; %m
+Q = (data.Vol_ml ./ 1e6) ./ data.Time_sec ; %m3/s
+V = Q/A; %m/s
+Re = V*D/nu; %dimensionless
+
+f = zeros(6,1);
+
+for i=1:3,
+    f(i) = 64./Re(i);
+end
+
+for i=4:6,
+    f(i) = ( 2*9.81*D*H(i) )/( L*V(i)^2 ) * (rhoHg/rhoW - 1);
+end
+
+% Show results table
+results = table(H, Re, f)
+
+%% Best-fit line through lab data
+
+rriF = linspace(0.001, 0.003, 11); %test e/D = 0.002, 0.0021, 0.0022, ...
+fF = zeros(length(rriF), 6); %[e/D datapt]
+for k=1:length(rriF), %k=test values of e/D
+    for m=4:6, %m = columns of Reynolds number data
+        fF(k,m) = fzero(@(f) 1/sqrt(f)+2*log10(rriF(k)/3.71+2.51/(Re(m)*sqrt(f))),[eps,1]);
+    end
+end
+
+% Determine best-fit value by rastering across likely values of e/D
+fF = fF(:,4:6);
+bestfittests = [rriF' sum(bsxfun(@minus,f(4:6)',fF).^2, 2)*1e5] % [e/D, sumsq{resid}]
+indexbest = find(bestfittests(:,2)==min(bestfittests(:,2))); %index of minimimum sumsq resdiuals
+rri_best = bestfittests(indexbest,1);
+
+fprintf(['Best-fit value of relative pipe roughness e/D = ' num2str(rri_best) '\n'])
+fprintf(['Sum of squares of residuals in f @ best-fit value = ' num2str(bestfittests(indexbest,2)) '\n'])
+
+% Make best-fit curve
+f_best = zeros(100,1);
+for i=1:100, %m = columns of Reynolds number data
+    f_best(i) = fzero(@(f) 1/sqrt(f)+2*log10(rri_best/3.71+2.51/(ReiT(i)*sqrt(f))),[eps,1]); % solve implicit Colebrook-White equation
+end
+
+%% Plot Moody diagram with Darcy-Weisbach friction factor
+
+figure(1); clf;
+
+% Laminar Flow
+loglog(ReiL, fiL, 'color', [0, 0.4470, 0.7410])        
+text(2.9e3, 0.015, 'laminar flow', ...
+    'FontSize', 8, ...
+    'Color', [0, 0.4470, 0.7410])
+
+% Transition Region
+rectangle('Position', [2100, 0.0015, 4000, 1.10], ...
+                'Curvature', 0.2, ...
+                'FaceColor', [0, 0, 0, 0.1], ...
+                'EdgeColor', [0, 0, 0, 0.0]);             
+text(4.1e3, 0.021, 'transition region', ...
+    'FontSize', 8, ...
+    'Color', [0.5, 0.5, 0.5])      
+
+hold on;
+
+% Turbulent Flow
+redMap = [linspace(0, 255, length(rriT))', zeros(length(rriT), 1), zeros(length(rriT), 1)]./255; %make red colormap for 15 lines
+for j = 1:length(rriT),
+    plot(ReiT, fiT(:,j), 'color', redMap(j,:))
+    text(1e8, fiT(end,j), [' ' num2str(rriT(j),'%g')], ...
+    'FontSize', 6, ...
+    'Color', redMap(j,:), ...
+    'VerticalAlign', 'middle', ...
+    'HorizontalAlign', 'left')
+end
+text(1.5e6, 0.08, 'turbulent flow', ...
+    'FontSize', 8, ...
+    'Color', 'r')
+
+% Best-fit e/D curve for turbulent flow data
+plot(ReiT, f_best, 'kREPLACE_WITH_DASH_DASH')
+text(1e8, f_best(end), [' ' num2str(rri_best,'%g')], ...
+    'FontSize', 6, ...
+    'Color', 'black', ...
+    'FontWeight', 'bold', ...
+    'VerticalAlign', 'middle', ...
+    'HorizontalAlign', 'left')
+text(1.1e7, 0.027, 'best-fit', ...
+    'FontSize', 6, ...
+    'FontWeight', 'bold', ...
+    'Color', 'k')
+
+%% Plot data
+
+plot(Re, f, 'k.')
+plot(Re, f, 'ko')
+
+%% Format plot
+
+ax = gca();
+ax.YAxis.Exponent = 0;
+% xtickformat('%.2f')
+yticks([0.01, 0.015, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1])
+yticks = get(gca,'YTick');
+set(gca,'YTickLabel',yticks);
+
+ylim([0.006 0.1])
+xlim([5e2 1e8])
+
+grid on
+
+xlabel('Reynolds number, $ Re = \frac{\rho\, VD}{\mu}$', 'interpreter', 'latex')
+ylabel('Friction factor, $f$', 'interpreter', 'latex')
+
+title('Moody diagram for Lab 1')
+
+
+##### SOURCE END #####
+--></body></html>
